@@ -113,8 +113,8 @@ def login():
         password = request.form['password']
         db = connect_db()
         c = db.cursor()
-        statement = "SELECT * FROM users WHERE username = '%s' AND password = '%s';" %(username, password)
-        c.execute(statement)
+        statement = "SELECT * FROM users WHERE username = ? AND password = ?;"
+        c.execute(statement,(username, password))
         result = c.fetchall()
 
         if len(result) > 0:

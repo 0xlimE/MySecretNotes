@@ -84,8 +84,8 @@ def notes():
             c = db.cursor()
             without_last = note_id[:len(note_id) - 1]
             print(without_last)
-            statement = """DELETE FROM notes WHERE publicID = %s""" %without_last
-            c.execute(statement)
+            statement = """DELETE FROM notes WHERE publicID = ?"""
+            c.execute(statement, [without_last])
             db.commit()
             db.close()
         elif request.form['submit_button'] == 'import note':

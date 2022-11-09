@@ -82,8 +82,10 @@ def notes():
             noteid = request.form['noteid']
             db = connect_db()
             c = db.cursor()
-            statement = """SELECT * from NOTES where publicID = %s""" %noteid
-            c.execute(statement)
+            #CHanged from string concatonation to question mark
+            statement = """SELECT * from NOTES where publicID = ?"""
+            #Noteid is added as an argument in execute
+            c.execute(statement, (noteid,))
             result = c.fetchall()
             if(len(result)>0):
                 row = result[0]
@@ -113,8 +115,8 @@ def login():
         password = request.form['password']
         db = connect_db()
         c = db.cursor()
-        statement = "SELECT * FROM users WHERE username = '%s' AND password = '%s';" %(username, password)
-        c.execute(statement)
+        statement = "SELECT * FROM users WHERE username = ? AND password = ?;"
+        c.execute(statement,(username, password))
         result = c.fetchall()
 
         if len(result) > 0:

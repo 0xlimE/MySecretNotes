@@ -11,11 +11,27 @@
   </li>
  -->
 
-  <li class="card notes__card-wrapper">
-    <div class="card-body notes__card-body">
-      <h5 class="card-title notes__card-title">Public Note ID: {{note[4]}}</h5>
-      <h6 class="card-subtitle mb-2 notes__card-subtitle">note written on: <span class="notes__card-subtitle--date ">{{ note[2] }}</span></h6>
-      <p class="card-text">{{ note[3] }}</p>
-      <button href="#" class="card-link card-delete-button btn-outline-sm">Delete</button>
-    </div>
-  </li>
+ <li class="card notes__card-wrapper">
+  <div class="card-body notes__card-body">
+    <h5 class="card-title notes__card-title" id="myInput">Public Note ID: {{note[4]}}</h5>
+    <h6 class="card-subtitle mb-2 notes__card-subtitle">note written on: <span class="notes__card-subtitle--date ">{{ note[2] }}</span></h6>
+    <p class="card-text">{{ note[3] }}</p>
+    <button href="#" class="card-link card-delete-button btn-outline-sm">Delete</button>
+    <button onclick = "myFunction({{note[4]}})">Copy Id</button>
+  </div>
+</li>
+
+<script>
+function myFunction(x) {
+// Get the text field
+var copyText = document.getElementById("myInput").innerText.substring(15,26);
+console.log(x);
+
+// Select the text field
+//copyText.setSelectionRange(16, 24); // For mobile devices
+
+ // Copy the text inside the text field
+navigator.clipboard.writeText(x);
+}
+  
+</script>

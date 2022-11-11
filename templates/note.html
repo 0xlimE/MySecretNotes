@@ -17,21 +17,15 @@
     <h6 class="card-subtitle mb-2 notes__card-subtitle">note written on: <span class="notes__card-subtitle--date ">{{ note[2] }}</span></h6>
     <p class="card-text">{{ note[3] }}</p>
     <button href="#" class="card-link card-delete-button btn-outline-sm">Delete</button>
-    <button onclick = "myFunction({{note[4]}})">Copy Id</button>
+    <button onclick = "toClipBoard({{note[4]}})">Copy Id</button>
+    <button onclick = "toClipBoard({{note[3]}})">Copy Text</button>
   </div>
 </li>
 
 <script>
-function myFunction(x) {
-// Get the text field
-var copyText = document.getElementById("myInput").innerText.substring(15,26);
-console.log(x);
-
-// Select the text field
-//copyText.setSelectionRange(16, 24); // For mobile devices
-
- // Copy the text inside the text field
+function toClipBoard(x) {
 navigator.clipboard.writeText(x);
 }
+
   
 </script>

@@ -16,6 +16,7 @@ def init_db():
     db.executescript("""
 
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS friendlist;
 DROP TABLE IF EXISTS notes;
 
 CREATE TABLE notes (
@@ -27,15 +28,24 @@ CREATE TABLE notes (
 );
 
 CREATE TABLE users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT, 
     username TEXT NOT NULL,
     password TEXT NOT NULL
 );
 
+CREATE TABLE friendlist (
+    assocUser INTEGER,
+    friendName TEXT NOT NULL,
+    UNIQUE(assocUser, friendName)
+);
+
 INSERT INTO users VALUES(null,"admin", "password");
 INSERT INTO users VALUES(null,"bernardo", "omgMPC");
+INSERT INTO users VALUES(null,"Markus", "markus123");
+INSERT INTO users VALUES(null,"Dagrun", "dagrun123");
 INSERT INTO notes VALUES(null,2,"1993-09-23 10:10:10","hello my friend",1234567890);
 INSERT INTO notes VALUES(null,2,"1993-09-23 12:10:10","i want lunch pls",1234567891);
+INSERT INTO friendlist VALUES(1, "bernardo");
 
 """)
 
@@ -82,7 +92,7 @@ def notes():
             noteid = request.form['noteid']
             db = connect_db()
             c = db.cursor()
-            #CHanged from string concatonation to question mark
+            #Changed from string concatonation to question mark
             statement = """SELECT * from NOTES where publicID = ?"""
             #Noteid is added as an argument in execute
             c.execute(statement, (noteid,))
@@ -95,16 +105,40 @@ def notes():
                 importerror="No such note with that ID!"
             db.commit()
             db.close()
+        elif request.form['submit_button'] == 'Add friend':
+            noteid = request.form['friendName']
+            db = connect_db()
+            c = db.cursor()
+            statement = """SELECT * from USERS where username = ?"""
+            c.execute(statement, (noteid,))
+            result = c.fetchall()
+            if(len(result)>0):
+                row = result[0]
+                # statement = """INSERT INTO notes(id,assocUser,dateWritten,note,publicID) VALUES(null,%s,'%s','%s',%s);""" %(session['userid'],row[2],row[3],row[4])
+                statement = """INSERT INTO friendlist(assocUser,friendname) VALUES('%s','%s');""" %(session['userid'],row[1])
+                c.execute(statement)
+            else:
+                importerror="No person with that username!"
+            db.commit()
+            db.close()
     
+    # Get user specific information to be displayed
     db = connect_db()
     c = db.cursor()
+    
+    # Get notes
     statement = "SELECT * FROM notes WHERE assocUser = %s;" %session['userid']
     print(statement)
     c.execute(statement)
     notes = c.fetchall()
     print(notes)
     
-    return render_template('notes.html',notes=notes,importerror=importerror)
+    # Get friends
+    statement = "SELECT * FROM friendlist WHERE assocUser = %s;" %session['userid']
+    c.execute(statement)
+    friends = c.fetchall()
+
+    return render_template('notes.html',notes=notes, friends=friends,importerror=importerror)
 
 
 @app.route("/login/", methods=('GET', 'POST'))

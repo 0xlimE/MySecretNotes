@@ -140,6 +140,32 @@ def notes():
 
     return render_template('notes.html',notes=notes, friends=friends,importerror=importerror)
 
+@app.route("/notes/delete/<publicID>", methods=('GET', 'POST'))
+def delete(publicID):
+        publicID = request.form['delete']
+        db = connect_db()
+        c = db.cursor()
+        statement = """SELECT * from NOTES where publicID = ?"""
+        c.execute(statement, (publicID,))
+        result = c.fetchall()
+        if(len(result)>0):
+            row = result[0]
+            statement = """DELETE from NOTES where publicID = ?"""
+            c.execute(statement, (publicID,))
+        else:
+            importerror="Note not deleted!"
+        db.commit()
+        db.close()  
+
+        db = connect_db()
+        c = db.cursor()
+        statement = "SELECT * FROM notes WHERE assocUser = %s;" %session['userid']
+        print(statement)
+        c.execute(statement)
+        notes = c.fetchall()
+        print(notes)
+        return redirect(url_for('notes'))
+
 
 @app.route("/login/", methods=('GET', 'POST'))
 def login():

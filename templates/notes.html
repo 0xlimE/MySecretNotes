@@ -309,7 +309,20 @@
     <p class="notes__text">Here are your notes:, you can share your notes by sharing your public id</p>
     <ul class="notes__item-container">
       {% for note in notes %}
-      {% include "note.html" %}
+      <li class="card notes__card-wrapper">
+        <div class="card-body notes__card-body">
+          <h5 class="card-title notes__card-title">Public Note ID: {{note[4]}}</h5>
+          <h6 class="card-subtitle mb-2 notes__card-subtitle">note written on: <span
+              class="notes__card-subtitle--date ">{{ note[2] }}</span></h6>
+          <p class="card-text">{{ note[3] }}</p>
+          <form action="{{ url_for('delete', publicID=note[4]) }}" method="post" class="notes__input-wrapper">
+            <input type="hidden" name="delete" value={{ note[4] }}>
+            <button class="card-link card-delete-button btn-outline-sm" type="submit"
+              formaction="delete/{{note[4]}}">Delete</button>
+            </input>
+          </form>
+        </div>
+      </li>
       {% endfor %}
     </ul>
   </section>

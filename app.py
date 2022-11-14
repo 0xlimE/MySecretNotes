@@ -1,5 +1,5 @@
-import json, sqlite3, click, functools, os, hashlib,time, random, sys, subprocess
-from flask import Flask, current_app, g, session, redirect, render_template, url_for, request
+import sqlite3, functools, os, time, random, sys, subprocess
+from flask import Flask, session, redirect, render_template, url_for, request, jsonify
 
 
 
@@ -173,11 +173,18 @@ def admin():
 @login_required
 def get_date():
     if request.method == "GET":
-        year = request.form['year']
-        month = request.form['month']
-        day = request.form['day']
-        user_input = f"Year: {year}, Month: {month}, Day: {day}"
-        subprocess.run("date -d " + user_input)
+        year = request.args['year']
+        month = request.args['month']
+        day = request.args['day']
+
+        user_input = f"{year}/{month}/{day}"
+
+        try:
+            d = subprocess.run([f"date -d {user_input}"], shell=True)
+            return jsonify({"success": True, "date": d})
+        except Exception as e:
+            print(e)
+            return jsonify({"success": False})
 
 
 @app.route("/logout/")

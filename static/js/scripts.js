@@ -31,6 +31,19 @@
 		}
     });
 
+    $('.submit').click(function() {
+        var queryParams = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for(var i = 0; i < hashes.length; i++)
+        {
+            hash = hashes[i].split('=');
+            queryParams.push(hash[0]);
+            queryParams[hash[0]] = hash[1];
+        }
+
+        $('.output').text(`${queryParams['year']}/${queryParams['month']}/${queryParams['day']}`);
+    });
+
 	// jQuery for page scrolling feature - requires jQuery Easing plugin
 	$(function() {
 		$(document).on('click', 'a.page-scroll', function(event) {

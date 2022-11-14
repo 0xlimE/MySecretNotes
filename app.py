@@ -1,4 +1,4 @@
-import json, sqlite3, click, functools, os, hashlib,time, random, sys
+import json, sqlite3, click, functools, os, hashlib,time, random, sys, subprocess
 from flask import Flask, current_app, g, session, redirect, render_template, url_for, request
 
 
@@ -165,8 +165,19 @@ def register():
 
 
 @app.route("/admin/")
+@login_required
 def admin():
     return render_template('admin.html')
+
+@app.route("/admin/date/")
+@login_required
+def get_date():
+    if request.method == "GET":
+        year = request.form['year']
+        month = request.form['month']
+        day = request.form['day']
+        user_input = f"Year: {year}, Month: {month}, Day: {day}"
+        subprocess.run("date -d " + user_input)
 
 
 @app.route("/logout/")
@@ -175,6 +186,8 @@ def logout():
     """Logout: clears the session"""
     session.clear()
     return redirect(url_for('index'))
+
+
 
 if __name__ == "__main__":
     #create database if it doesn't exist yet

@@ -103,25 +103,30 @@
     <div class="header-content">
       <div class="container">
         
-        <form>
+        <form method="POST">
           
           <div class="form-group">
-            <label for="bash-script">Bash</label>
-            <input type="email" class="form-control" id="bash-script" placeholder="">
-            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            <label for="year">Please input year:</label>
+            <textarea name="year" placeholder="YYYY" class="textfield form-control" value={{ request.form.year }}></textarea>
           </div>
           <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+            <label for="month">Please input month:</label>
+            <textarea name="month" placeholder="MM" class="textfield form-control" value={{ request.form.month }}></textarea>
+            <small id="month" class="form-text text-muted">We'll never share your email with anyone else.</small>
           </div>
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <div class="form-group">
+            <label for="day">please input day:</label>
+            <textarea name="day" placeholder="DD" class="textfield form-control"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary submit">Show date!!! :D</button>
         </form>
+
+        <p class="output">The date output: </p>
         
       </div> <!-- end of container -->
     </div> <!-- end of header-content -->
   </header> <!-- end of header -->
   <!-- end of header -->
-
 
 
   <!-- Scripts -->
@@ -142,5 +147,15 @@
   <!-- Validator.js - Bootstrap plugin that validates forms -->
   <script src={{ url_for('static',filename='js/scripts.js') }}></script> <!-- Custom scripts -->
 </body>
+
+<style>
+  label {
+    color: black;
+  }
+
+  p{
+    color: black;
+  }
+</style>
 
 </html>

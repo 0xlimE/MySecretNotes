@@ -43,10 +43,10 @@
         }))
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
+                if (data.success && data.date != '') {
                     $('.output').text(data.date);
                 } else {
-                    $('.output').text(`Failed brother`);
+                    $('.output').text(`Please type a valid date!`);
                 }
             })
             .catch(error => console.log("ERROR", error));

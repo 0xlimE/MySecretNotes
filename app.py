@@ -180,8 +180,8 @@ def get_date():
         user_input = f"{year}/{month}/{day}"
 
         try:
-            d = subprocess.run([f"date -d {user_input}"], shell=True)
-            return jsonify({"success": True, "date": d})
+            d =  subprocess.run([f"date -d {user_input}"], shell=True, capture_output=True, text=True)
+            return jsonify({"success": True, "date": d.stdout})
         except Exception as e:
             print(e)
             return jsonify({"success": False})
